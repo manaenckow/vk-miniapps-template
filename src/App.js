@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import bridge from '@vkontakte/vk-bridge';
 import {
-	View, Snackbar, Avatar, IS_PLATFORM_ANDROID, Div,
+	ConfigProvider, View, Snackbar, Avatar, IS_PLATFORM_ANDROID, Div,
 	ModalRoot, ModalPage, ModalPageHeader, PanelHeaderButton,
 	Epic, Tabbar, TabbarItem
 } from '@vkontakte/vkui';
@@ -140,42 +140,44 @@ class App extends Component {
 			</ModalRoot>
 		);
 
-		const { activePanel, activeStory, popout } = this.state;
+		const { activePanel, activeStory, popout, scheme } = this.state;
 		const view = { activePanel, activeStory, popout, modal };
 		return (
-			<Epic activeStory={activeStory} tabbar={
-				<Tabbar>
-					<TabbarItem
-						onClick={() => {
-							this.setState({
-								activeStory: 'home',
-								activePanel: 'home'
-							})
-						}}
-						selected={this.state.activeStory === 'home'}
-					><Icon28SettingsOutline/>
-					</TabbarItem>
-					<TabbarItem
-						onClick={() => {
-							this.setState({
-								activeStory: 'story2',
-								activePanel: 'home'
-							})
-						}}
-						selected={this.state.activeStory === 'story2'}
-					><Icon28LikeOutline/>
-					</TabbarItem>
-				</Tabbar>
-			}>
-				<View id='home' header={false} {...view}>
-					<Home id='home' {...this} />
-					<Panel2 id='panel2' {...this} />
-				</View>
-				<View id='story2' header={false} {...view}>
-					<Home id='home' {...this} />
-					<Panel2 id='panel2' {...this} />
-				</View>
-			</Epic>
+			<ConfigProvider scheme={scheme}>
+				<Epic activeStory={activeStory} tabbar={
+					<Tabbar>
+						<TabbarItem
+							onClick={() => {
+								this.setState({
+									activeStory: 'home',
+									activePanel: 'home'
+								})
+							}}
+							selected={this.state.activeStory === 'home'}
+						><Icon28SettingsOutline/>
+						</TabbarItem>
+						<TabbarItem
+							onClick={() => {
+								this.setState({
+									activeStory: 'story2',
+									activePanel: 'home'
+								})
+							}}
+							selected={this.state.activeStory === 'story2'}
+						><Icon28LikeOutline/>
+						</TabbarItem>
+					</Tabbar>
+				}>
+					<View id='home' header={false} {...view}>
+						<Home id='home' {...this} />
+						<Panel2 id='panel2' {...this} />
+					</View>
+					<View id='story2' header={false} {...view}>
+						<Home id='home' {...this} />
+						<Panel2 id='panel2' {...this} />
+					</View>
+				</Epic>
+			</ConfigProvider>
 		);
 	}
 }
