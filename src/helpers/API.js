@@ -26,7 +26,7 @@ export default class API {
   }
 
   async SimplePost(data) {
-    const response = await this.send(API_URL, "POSH", "post", data);
+    const response = await this.send(API_URL, "POST", "post", data);
     console.log("API: ", "SimplePost", response);
 
     return response;
