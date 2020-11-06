@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://manaenckov.design/api/';
+const API_URL = 'https://manaenckov.design/api/king/';
 
 axios.defaults.headers.common = {
   Accept: "application/json, text/plain, */*"
@@ -18,9 +18,9 @@ export default class API {
     return response ? response.data : [];
   }
 
-  async SimpleGet() {
-    const response = await this.send(API_URL, "GET", "get", null);
-    console.log("API: ", "SimpleGet", response);
+  async GetUser() {
+    const response = await this.send(API_URL, "GET", "getUser", null);
+    console.log("API: ", "GetUser", response);
 
     return response;
   }
