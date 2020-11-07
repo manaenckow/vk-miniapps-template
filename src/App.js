@@ -1,9 +1,20 @@
 import React, {Component} from 'react';
 import bridge from '@vkontakte/vk-bridge';
 import {
-    ConfigProvider, View, Snackbar, Avatar, IS_PLATFORM_ANDROID, Div,
-    ModalRoot, ModalPage, ModalPageHeader, PanelHeaderButton,
-    Epic, Tabbar, TabbarItem
+    ConfigProvider,
+    View,
+    Snackbar,
+    Avatar,
+    IS_PLATFORM_ANDROID,
+    Div,
+    ModalRoot,
+    ModalPage,
+    ModalPageHeader,
+    PanelHeaderButton,
+    Epic,
+    Tabbar,
+    TabbarItem,
+    ScreenSpinner
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
@@ -22,7 +33,7 @@ import {
     Icon24Cancel,
     Icon28SettingsOutline,
     Icon28LikeOutline
-} from '@vkontakte/icons/dist/16/clear';
+} from '@vkontakte/icons';
 
 
 class App extends Component {
@@ -46,6 +57,7 @@ class App extends Component {
             scheme: true ? 'space_gray' : 'bright_light'
         };
         this.api = new API();
+        this.initHelpers();
     }
 
     componentDidMount() {
@@ -61,6 +73,23 @@ class App extends Component {
             }
         });
         bridge.send('VKWebAppGetUserInfo');
+    }
+
+    initHelpers = () => {
+        window.startLoad = () => {
+            this.setState({
+                popout: <ScreenSpinner/>
+            })
+        }
+
+        window.endLoad = () => {
+            this.setState({
+                popout: null
+            })
+        }
+
+        window.openDoneSnackBar = this.openDoneSnackBar;
+        window.openErrorSnackBar = this.openErrorSnackBar;
     }
 
     go = (activePanel) => {
