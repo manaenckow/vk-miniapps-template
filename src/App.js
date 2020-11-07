@@ -23,7 +23,10 @@ import './css/fonts.css';
 
 import API from './helpers/API.js';
 
+import Onboarding from "./panels/Onboarding";
+
 import Home from './panels/Home';
+
 import Panel2 from './panels/Panel2';
 
 import {
@@ -35,6 +38,16 @@ import {
     Icon28LikeOutline
 } from '@vkontakte/icons';
 
+import dark1 from './panels/components/onboardingPanels/dark1.png';
+import dark4 from './panels/components/onboardingPanels/dark4.png';
+import dark6 from './panels/components/onboardingPanels/dark6.png';
+import dark7 from './panels/components/onboardingPanels/dark7.png';
+
+import light1 from './panels/components/onboardingPanels/light1.png';
+import light4 from './panels/components/onboardingPanels/light4.png';
+import light6 from './panels/components/onboardingPanels/light6.png';
+import light7 from './panels/components/onboardingPanels/light7.png';
+
 
 class App extends Component {
     constructor(props) {
@@ -43,6 +56,8 @@ class App extends Component {
         this.state = {
             activePanel: 'home',
             activeStory: 'home',
+
+            slideIndex: 1,
 
             popout: null,
             modal: null,
@@ -170,11 +185,36 @@ class App extends Component {
             </ModalRoot>
         );
 
+        const pages = [
+            {
+                image: this.state.scheme === 'bright_light' ? light1 : dark1,
+                title: 'Заголовок',
+                subtitle: 'Подзаголовок',
+            },
+            {
+                image: this.state.scheme === 'bright_light' ? light4 : dark4,
+                title: 'Заголовок',
+                subtitle: 'Подзаголовок',
+            },
+            {
+                image: this.state.scheme === 'bright_light' ? light6 : dark6,
+                title: 'Заголовок',
+                subtitle: 'Подзаголовок',
+            },
+            {
+                image: this.state.scheme === 'bright_light' ? light7 : dark7,
+                title: 'Заголовок',
+                subtitle: 'Подзаголовок',
+            },
+        ];
+
         const {activePanel, activeStory, popout, scheme} = this.state;
-        const view = {activePanel, activeStory, popout, modal};
+        const history = ['home', 'onboarding'].includes(activePanel) ? [activePanel] : ['home', activePanel];
+        const onSwipeBack = () => this.go('home');
+        const view = {activePanel, activeStory, popout, modal, history, onSwipeBack};
         return (
-            <ConfigProvider scheme={scheme}>
-                <Epic activeStory={activeStory} tabbar={
+            <ConfigProvider scheme={scheme} isWebView>
+                <Epic activeStory={activeStory} tabbar={activePanel !== 'onboarding' &&
                     <Tabbar>
                         <TabbarItem
                             onClick={() => {
@@ -199,6 +239,12 @@ class App extends Component {
                     </Tabbar>
                 }>
                     <View id='home' header={false} {...view}>
+                        <Onboarding
+                            id='onboarding'
+                            setPState={this.setState.bind(this)}
+                            pages={pages}
+                            {...this}
+                        />
                         <Home id='home' {...this} />
                         <Panel2 id='panel2' {...this} />
                     </View>

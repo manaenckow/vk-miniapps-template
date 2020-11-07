@@ -23,6 +23,9 @@ const Home = props => {
             <Button size="xl" onClick={() => props.go('panel2')}>
               Simple button
             </Button>
+            <Button size="xl" onClick={() => props.go('onboarding')}>
+              Open onboarding
+            </Button>
             <Button size="xl" onClick={() => props.openDoneSnackBar('Done.')}>
               OpenDoneSnackBar
             </Button>
