@@ -1,0 +1,106 @@
+.onboarding {
+  height: 84vh;
+  padding-top: 1vh;
+  width: 100%;
+  display: flex !important;
+  outline: none !important;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  white-space: pre-line;
+}
+
+.image {
+  width: 30vh;
+}
+
+.title {
+  font-family: "TT Norms";
+  font-weight: bold;
+  padding: 5vh 0 2vh 0;
+  font-size: 25px;
+  line-height: 1.2;
+}
+.titleD {
+  font-family: "TT Norms";
+  font-weight: bold;
+  padding: 5vh 0 2vh 0;
+  font-size: 25px;
+  line-height: 1.2;
+  color: #fff;
+}
+
+.subtitle {
+  font-family: "TT Norms";
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 1.2;
+}
+.subtitleD {
+  font-family: "TT Norms";
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 1.2;
+  color: #fff;
+}
+
+.button_next {
+  bottom: 1.5vh;
+  position: fixed;
+}
+
+.button_Panel {
+  width: 90vw !important;
+  justify-content: center;
+}
+
+.dots {
+  display: inline-flex;
+  align-items: center;
+  position: fixed;
+  padding: 4vh 0;
+  justify-content: center;
+  left: 0;
+  right: 0px;
+}
+
+.dot {
+  margin: 0 4px;
+  border-radius: 30px;
+  background-color: #7aa9dd;
+}
+.dotDark {
+  margin: 0 4px;
+  border-radius: 30px;
+  background-color: #fff;
+}
+
+
+#onboarding > .Panel__in {
+  padding-bottom: 0 !important;
+}
+
+.slick-prev, .slick-next {
+  display: none !important;
+}
+
+@media screen and (max-height : 1024px) {
+  .onboarding {
+    height: 80vh;
+  }
+}
+@media screen and (max-height : 700px) {
+  .onboarding {
+    height: 80vh;
+  }
+}
+@media screen and (max-height : 600px) {
+  .onboarding {
+    height: 79vh;
+  }
+}
+@media screen and (max-height : 550px) {
+  .onboarding {
+    height: 78vh;
+  }
+}
