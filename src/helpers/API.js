@@ -1,10 +1,8 @@
 import axios from 'axios';
 
-const API_URL = 'https://manaenckov.design/api/king/';
+const API_URL = 'https://tstud.buzz/api/template/';
 
-axios.defaults.headers.common = {
-  Accept: "application/json, text/plain, */*"
-};
+axios.defaults.headers.common['x-vk'] = window.location.href;
 
 export default class API {
   async send(url, method = 'GET', action, data = {}) {

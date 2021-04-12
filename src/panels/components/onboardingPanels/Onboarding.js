@@ -1,19 +1,56 @@
 import React from 'react';
 import {
     Panel,
-    PanelHeaderSimple,
+    PanelHeader,
     Gallery,
     Div, Button, FixedLayout
 } from '@vkontakte/vkui';
 
-import '../css/Page.css';
+import '../../../css/Page.css';
+
+import dark1 from './dark1.png';
+import dark4 from './dark4.png';
+import dark6 from './dark6.png';
+import dark7 from './dark7.png';
+
+import light1 from './light1.png';
+import light4 from './light4.png';
+import light6 from './light6.png';
+import light7 from './light7.png';
+
 
 const Onboarding = props => {
-    const pages = props.pages;
+    const {state, setPState} = props;
+    const {scheme} = state;
+    const lightScheme = scheme === 'bright_light';
+
+    const pages = [
+        {
+            image: lightScheme ? light1 : dark1,
+            title: 'Заголовок',
+            subtitle: 'Подзаголовок',
+        },
+        {
+            image: lightScheme ? light4 : dark4,
+            title: 'Заголовок',
+            subtitle: 'Подзаголовок',
+        },
+        {
+            image: lightScheme ? light6 : dark6,
+            title: 'Заголовок',
+            subtitle: 'Подзаголовок',
+        },
+        {
+            image: lightScheme ? light7 : dark7,
+            title: 'Заголовок',
+            subtitle: 'Подзаголовок',
+        },
+    ];
+
 
     const PageDot = ({selected, id}) => (
         <div
-            className={props.state.scheme === 'space_gray' ? 'dotDark' : 'dot'}
+            className={lightScheme ? 'dot' : 'dotDark'}
             style={{
                 width: (selected ? '8px' : '6px'),
                 height: (selected ? '8px' : '6px')
@@ -34,21 +71,20 @@ const Onboarding = props => {
 
     return (
         <Panel id={props.id}>
-            <PanelHeaderSimple separator={false}/>
+            <PanelHeader separator={false}/>
             <FixedLayout vertical='top'>
                 <Gallery
-                    onChange={(slideIndex) => props.setPState({slideIndex})}
-                    slideIndex={props.state.slideIndex}
+                    onChange={(slideIndex) => setPState({slideIndex})}
+                    slideIndex={state.slideIndex}
                     style={{height: window.innerHeight}}
                 >
                     {pages.map((page, key) => {
                         const {image, title, subtitle} = page;
-                        const scheme = props.state.scheme;
                         return (
                             <div key={key} className="onboarding">
                                 <img alt='пикча' src={image} className="image"/>
-                                <span className={scheme === 'bright_light' ? 'title' : 'titleD'}>{title}</span>
-                                <span className={scheme === 'bright_light' ? 'subtitle' : 'subtitleD'}>{subtitle}</span>
+                                <span className={lightScheme ? 'title' : 'titleD'}>{title}</span>
+                                <span className={lightScheme ? 'subtitle' : 'subtitleD'}>{subtitle}</span>
                             </div>
                         );
                     })}
@@ -62,18 +98,18 @@ const Onboarding = props => {
                         }}
                         stretched
                         onClick={() => {
-                            if (pages.length - 1 === props.state.slideIndex) {
-                                props.setPState({activePanel: 'home'});
+                            if (pages.length - 1 === state.slideIndex) {
+                                setPState({activePanel: 'home'});
                             } else {
-                                props.setPState({slideIndex: props.state.slideIndex + 1});
+                                setPState({slideIndex: state.slideIndex + 1});
                             }
                         }}
                     >
-                        {pages.length - 1 === props.state.slideIndex ? 'Начать' : 'Далее'}
+                        {pages.length - 1 === state.slideIndex ? 'Начать' : 'Далее'}
                     </Button>
                 </Div>
                 <Div>
-                    <PageDots pages={pages.length} currentPage={props.state.slideIndex}/>
+                    <PageDots pages={pages.length} currentPage={state.slideIndex}/>
                 </Div>
             </FixedLayout>
         </Panel>

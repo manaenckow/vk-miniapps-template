@@ -1,9 +1,9 @@
 * {
-    font-family: 'SF UI Display', serif;
+    font-family: 'SF UI Display', sans-serif;
 }
 
 .PanelHeaderSimple__in {
-    font-family: 'TT Norms', serif;
+    /*font-family: 'TT Norms', serif;*/
 }
 
 .PromoBanner {

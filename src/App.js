@@ -1,16 +1,13 @@
-import React, {Component} from 'react';
+import React, {Component, /*Suspense, lazy*/} from 'react';
 import bridge from '@vkontakte/vk-bridge';
+
+// Components
 import {
     ConfigProvider,
     View,
     Snackbar,
     Avatar,
-    IS_PLATFORM_ANDROID,
-    Div,
     ModalRoot,
-    ModalPage,
-    ModalPageHeader,
-    PanelHeaderButton,
     Epic,
     Tabbar,
     TabbarItem,
@@ -18,36 +15,33 @@ import {
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
+
+// Styles
 import './css/main.css';
 import './css/fonts.css';
 
+// Helpers
 import API from './helpers/API.js';
 
-import Onboarding from "./panels/Onboarding";
-
+// Panels
+import Onboarding from "./panels/components/onboardingPanels/Onboarding";
 import Home from './panels/Home';
-
 import Panel2 from './panels/Panel2';
+
+// Modals
+import SimpleModal from "./modals/SimpleModal";
+
+// Icons
 
 import {
     Icon16Clear,
     Icon16Done,
-    Icon24Done,
-    Icon24Cancel,
     Icon28SettingsOutline,
-    Icon28LikeOutline
+    Icon28Profile
 } from '@vkontakte/icons';
 
-import dark1 from './panels/components/onboardingPanels/dark1.png';
-import dark4 from './panels/components/onboardingPanels/dark4.png';
-import dark6 from './panels/components/onboardingPanels/dark6.png';
-import dark7 from './panels/components/onboardingPanels/dark7.png';
 
-import light1 from './panels/components/onboardingPanels/light1.png';
-import light4 from './panels/components/onboardingPanels/light4.png';
-import light6 from './panels/components/onboardingPanels/light6.png';
-import light7 from './panels/components/onboardingPanels/light7.png';
-
+//const SimpleModal = lazy(() => import('./modals/SimpleModal'));
 
 class App extends Component {
     constructor(props) {
@@ -69,13 +63,16 @@ class App extends Component {
                 last_name: 'User'
             },
 
-            scheme: true ? 'space_gray' : 'bright_light'
+            user: false,
+
+            scheme: 'bright_light'
         };
         this.api = new API();
         this.initHelpers();
     }
 
     componentDidMount() {
+        bridge.send("VKWebAppInit");
         bridge.subscribe(({detail: {type, data}}) => {
             if (type === 'VKWebAppUpdateConfig') {
                 const schemeAttribute = document.createAttribute('scheme');
@@ -105,6 +102,17 @@ class App extends Component {
 
         window.openDoneSnackBar = this.openDoneSnackBar;
         window.openErrorSnackBar = this.openErrorSnackBar;
+    }
+
+
+    getUser = () => {
+        this.api.GetUser().then(res => {
+            if (res.vk_id) {
+                this.setState({user: res});
+            } else {
+                this.openErrorSnackBar(res.error || res);
+            }
+        })
     }
 
     go = (activePanel) => {
@@ -157,100 +165,52 @@ class App extends Component {
 
     render() {
 
-        const modal = (
-            <ModalRoot activeModal={this.state.modal} onClose={this.closeModal}>
-                <ModalPage
-                    id='main'
-                    onClose={this.closeModal}
-                    header={
-                        <ModalPageHeader
-                            left={IS_PLATFORM_ANDROID &&
-                            <PanelHeaderButton onClick={this.closeModal}>
-                                <Icon24Cancel/>
-                            </PanelHeaderButton>}
-                            right={
-                                <PanelHeaderButton onClick={this.closeModal}>
-                                    {IS_PLATFORM_ANDROID ? <Icon24Done/> : 'Готово'}
-                                </PanelHeaderButton>
-                            }
-                        >
-                            Simple modal
-                        </ModalPageHeader>
-                    }
-                >
-                    <Div>
-                        Simple modal content
-                    </Div>
-                </ModalPage>
+        const {activePanel, activeStory, popout, scheme, modal} = this.state;
+
+        const modalRoot = (
+            <ModalRoot activeModal={modal} onClose={this.closeModal}>
+                    <SimpleModal id='main' closeModal={this.closeModal}/>
             </ModalRoot>
         );
 
-        const pages = [
-            {
-                image: this.state.scheme === 'bright_light' ? light1 : dark1,
-                title: 'Заголовок',
-                subtitle: 'Подзаголовок',
-            },
-            {
-                image: this.state.scheme === 'bright_light' ? light4 : dark4,
-                title: 'Заголовок',
-                subtitle: 'Подзаголовок',
-            },
-            {
-                image: this.state.scheme === 'bright_light' ? light6 : dark6,
-                title: 'Заголовок',
-                subtitle: 'Подзаголовок',
-            },
-            {
-                image: this.state.scheme === 'bright_light' ? light7 : dark7,
-                title: 'Заголовок',
-                subtitle: 'Подзаголовок',
-            },
-        ];
-
-        const {activePanel, activeStory, popout, scheme} = this.state;
         const history = ['home', 'onboarding'].includes(activePanel) ? [activePanel] : ['home', activePanel];
         const onSwipeBack = () => this.go('home');
-        const view = {activePanel, activeStory, popout, modal, history, onSwipeBack};
+        const view = {activePanel, activeStory, popout, modal: modalRoot, history, onSwipeBack};
+        const props = {setPState: this.setState.bind(this)}
         return (
             <ConfigProvider scheme={scheme} isWebView>
                 <Epic activeStory={activeStory} tabbar={activePanel !== 'onboarding' &&
-                    <Tabbar>
-                        <TabbarItem
-                            onClick={() => {
-                                this.setState({
-                                    activeStory: 'home',
-                                    activePanel: 'home'
-                                })
-                            }}
-                            selected={this.state.activeStory === 'home'}
-                        ><Icon28SettingsOutline/>
-                        </TabbarItem>
-                        <TabbarItem
-                            onClick={() => {
-                                this.setState({
-                                    activeStory: 'story2',
-                                    activePanel: 'home'
-                                })
-                            }}
-                            selected={this.state.activeStory === 'story2'}
-                        ><Icon28LikeOutline/>
-                        </TabbarItem>
-                    </Tabbar>
+                <Tabbar>
+                    <TabbarItem
+                        onClick={() => {
+                            this.setState({
+                                activeStory: 'home',
+                                activePanel: 'home'
+                            })
+                        }}
+                        selected={activeStory === 'home'}
+                    ><Icon28Profile/>
+                    </TabbarItem>
+                    <TabbarItem
+                        onClick={() => {
+                            this.setState({
+                                activeStory: 'story2',
+                                activePanel: 'panel2'
+                            })
+                        }}
+                        selected={activeStory === 'story2'}
+                    ><Icon28SettingsOutline/>
+                    </TabbarItem>
+                </Tabbar>
                 }>
-                    <View id='home' header={false} {...view}>
-                        <Onboarding
-                            id='onboarding'
-                            setPState={this.setState.bind(this)}
-                            pages={pages}
-                            {...this}
-                        />
-                        <Home id='home' {...this} />
-                        <Panel2 id='panel2' {...this} />
+                    <View id='home' {...view}>
+                        <Onboarding id='onboarding' {...this} {...props}/>
+                        <Home id='home' {...this} {...props}/>
+                        <Panel2 id='panel2' {...this} {...props}/>
                     </View>
-                    <View id='story2' header={false} {...view}>
-                        <Home id='home' {...this} />
-                        <Panel2 id='panel2' {...this} />
+                    <View id='story2' {...view}>
+                        <Home id='home' {...this} {...props}/>
+                        <Panel2 id='panel2' {...this} {...props}/>
                     </View>
                 </Epic>
             </ConfigProvider>

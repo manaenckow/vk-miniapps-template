@@ -2,9 +2,15 @@ import "core-js/features/map";
 import "core-js/features/set";
 import React from "react";
 import ReactDOM from "react-dom";
-import bridge from "@vkontakte/vk-bridge";
 import App from "./App";
+import {AdaptivityProvider, AppRoot} from "@vkontakte/vkui";
 
-bridge.send("VKWebAppInit");
+const Structure = (
+    <AdaptivityProvider>
+        <AppRoot>
+            <App/>
+        </AppRoot>
+    </AdaptivityProvider>
+);
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(Structure, document.getElementById("root"));

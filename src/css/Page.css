@@ -15,14 +15,14 @@
 }
 
 .title {
-  font-family: "TT Norms";
+  font-family: "SF UI Display", sans-serif;
   font-weight: bold;
   padding: 5vh 0 2vh 0;
   font-size: 25px;
   line-height: 1.2;
 }
 .titleD {
-  font-family: "TT Norms";
+  font-family: "SF UI Display", sans-serif;
   font-weight: bold;
   padding: 5vh 0 2vh 0;
   font-size: 25px;
@@ -31,13 +31,13 @@
 }
 
 .subtitle {
-  font-family: "TT Norms";
+  font-family: "SF UI Display", sans-serif;
   font-weight: normal;
   font-size: 15px;
   line-height: 1.2;
 }
 .subtitleD {
-  font-family: "TT Norms";
+  font-family: "SF UI Display", sans-serif;
   font-weight: normal;
   font-size: 15px;
   line-height: 1.2;
